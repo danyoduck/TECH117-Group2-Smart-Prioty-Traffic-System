@@ -8,11 +8,6 @@ main {
 }
 
 
-
-:root {
-    color-scheme: light dark;
-}
-
 body {
     font-family: system-ui, Arial, sans-serif;
     line-height: 1.6;
