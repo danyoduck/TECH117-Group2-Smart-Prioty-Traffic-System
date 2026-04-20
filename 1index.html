@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Streetcar Priority Traffic System</title>
+
+  <!-- Prism.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css?v=2" />
+</head>
+
+<script>
+  window.addEventListener("beforeprint", () => {
+    const proto = document.getElementById("prototypeImage");
+    const printHeroImg = document.querySelector("#print-hero img");
+    if (proto && printHeroImg) {
+      printHeroImg.src = proto.src;
+    }
+  });
+</script>
+
+<body>
+
+<!-- NAVIGATION -->
+<nav id="menu">
+  <h3>Menu</h3>
+  <ul>
+    <li><a href="#top">Title</a></li>
+    <li><a href="#information">Project Info</a></li>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#goals">Goals</a></li>
+    <li><a href="#constraints">Constraints</a></li>
+    <li><a href="#circuit">Circuit</a></li>
+    <li><a href="#environment">Environment</a></li>
+    <li><a href="#materials">Materials</a></li>
+    <li><a href="#prototype">Prototype</a></li>
+    <li><a href="#code">Code</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+
+<button class="print-button" onclick="window.print()">Print This Page</button>
+
+<h1 id="top">Smart Streetcar Priority Traffic System</h1>
+
+<div id="print-hero">
+  <img src="" alt="">
+</div>
+
+<!-- INFO -->
+<section id="information">
+  <h2>Project Information</h2>
+  <p><strong>Course:</strong> TECH 117</p>
+  <p><strong>Instructor:</strong> Ph.D. Ana Rodrigues</p>
+
+  <p><strong>Team Members:</strong></p>
+  <ul>
+    <li>Charles Castillo</li>
+    <li>Daniel-an Dao</li>
+    <li>Shawn Valdez</li>
+  </ul>
+</section>
+
+<!-- INTRO -->
+<section id="introduction">
+  <h2>Introduction</h2>
+  <p>
+    Traffic can slow down streetcars when they share the road with regular cars.
+    In this project, we are creating a smart traffic light system that gives
+    streetcars priority. When a streetcar is coming, the system will detect it
+    and turn the traffic light red for cars so the streetcar can pass faster.
+    This will help reduce delays and improve traffic flow. We will know the
+    project works well if the system can correctly detect vehicles and control
+    the lights properly in different situations.
+  </p>
+</section>
+
+<!-- GOALS -->
+<section id="goals">
+  <h2>Goal and Criteria</h2>
+  <p>
+    Our main goal is to create a circuit that helps streetcars avoid being dragged
+    into normal street traffic. If a streetcar is coming, the traffic light turns red
+    for cars. Otherwise, normal traffic stays green.
+  </p>
+  <p>
+    Success is measured by how well the system adapts to traffic and detects
+    multiple vehicles accurately.
+  </p>
+</section>
+
+<!-- CONSTRAINTS -->
+<section id="constraints">
+  <h2>Constraints & Risks</h2>
+  <p>
+    Challenges include limited coding skills, available materials, and budget.
+  </p>
+  <p>
+    To solve this, we used cardboard, toy cars, and simple materials to build a low-cost prototype.
+  </p>
+</section>
+
+<!-- CIRCUIT -->
+<section id="circuit">
+  <h2>Circuit Diagram</h2>
+  <img src="circuit diagram.png" alt="Circuit Diagram">
+</section>
+
+<!-- ENVIRONMENT -->
+<section id="environment">
+  <h2>Environmental Impact</h2>
+  <ul>
+    <li>Low power usage</li>
+    <li>Reusable components</li>
+    <li>Minimal waste due to simple materials</li>
+  </ul>
+</section>
+
+<!-- MATERIALS -->
+<section id="materials">
+  <h2>Materials Used</h2>
+  <ul>
+    <li>Arduino Board</li>
+    <li>2 Breadboards</li>
+    <li>6 Resistors</li>
+    <li>1 Ultrasonic Sensor</li>
+    <li>6 LEDs</li>
+    <li>Jumper Wires</li>
+  </ul>
+  <p><strong>Total Cost:</strong> $0</p>
+</section>
+
+<!-- PROTOTYPE -->
+<section id="prototype">
+  <h2>Prototype</h2>
+  <img id="prototypeImage" src="prototype.jpg" alt="Prototype">
+</section>
+
+<!-- CODE -->
+<section id="code">
+  <h2>Arduino Code</h2>
+
+<div class="code-container" style="position: relative;">
+<button class="copy-btn" onclick="copyCode()">Copy</button>
+
+<pre class="line-numbers"><code id="arduinoCode" class="language-cpp">
+int red = 4;
+int yellow = 3;
+int green = 2;
+
+const int trigPin = 9;
+const int echoPin = 10;
+
+float duration, distance;
+
+void setup(){
+    pinMode(red, OUTPUT);
+    pinMode(yellow, OUTPUT);
+    pinMode(green, OUTPUT);
+    pinMode(trigPin, OUTPUT);
+    pinMode(echoPin, INPUT);
+    Serial.begin(9600);
+}
+
+void loop(){
+    readDistance();
+
+    if (distance < 10) {
+        digitalWrite(red, HIGH);
+        digitalWrite(yellow, LOW);
+        digitalWrite(green, LOW);
+    }
+    else if (distance >= 10 && distance < 30) {
+        digitalWrite(red, LOW);
+        digitalWrite(yellow, HIGH);
+        digitalWrite(green, LOW);
+    }
+    else {
+        digitalWrite(red, LOW);
+        digitalWrite(yellow, LOW);
+        digitalWrite(green, HIGH);
+    }
+
+    delay(200);
+}
+
+void readDistance() {
+    digitalWrite(trigPin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trigPin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trigPin, LOW);
+
+    duration = pulseIn(echoPin, HIGH);
+    distance = (duration * 0.0343) / 2;
+
+    Serial.println(distance);
+}
+</code></pre>
+</div>
+
+<script>
+function copyCode() {
+  const code = document.getElementById('arduinoCode').innerText;
+  navigator.clipboard.writeText(code);
+  alert('Code copied!');
+}
+</script>
+
+</section>
+
+<!-- CONCLUSION -->
+<section id="conclusion">
+  <h2>Conclusion</h2>
+  <p>
+    This project demonstrates how sensors and automation can improve traffic flow.
+    The system is simple, effective, and adaptable for real-world use.
+  </p>
+</section>
+
+<!-- REFERENCES -->
+<section id="references">
+  <h2>References</h2>
+  <ul>
+    <li>Arduino Project Hub</li>
+    <li>Instructables</li>
+    <li>Circuit Basics</li>
+  </ul>
+</section>
+
+</body>
+</html>
